@@ -17,6 +17,9 @@ import { FormInputText } from "../forms/FormInputText";
 import { SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "@/schemas/login";
+import { useUserLoginMutation } from "@/redux/api/authApi";
+import { useRouter } from "next/navigation";
+import { storeUserInfo } from "@/services/auth.service";
 
 type FormValues = {
   email: string;
@@ -24,9 +27,24 @@ type FormValues = {
 };
 
 const SigninForm = () => {
+const [userLogin] = useUserLoginMutation();
+const router = useRouter();
+
+
   const onSubmit: SubmitHandler<FormValues> = async (data: any) => {
-    
-    console.log(data);
+    try {
+      // console.log(data);
+      const res = await userLogin({ ...data }).unwrap();
+    //   console.log(res);
+      if (res?.accessToken) {
+        router.push("/");
+      }
+      storeUserInfo({ accessToken: res?.accessToken });
+      console.log(res);
+    } catch (err: any) {
+      console.error(err.message);
+    }
+    // console.log(data);
   };
 
   return (

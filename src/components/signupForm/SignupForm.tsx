@@ -17,6 +17,8 @@ import { FormInputText } from "../forms/FormInputText";
 import { SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { registrationSchema } from "@/schemas/registration";
+import { useUserRegistrationMutation } from "@/redux/api/authApi";
+import { useRouter } from "next/navigation";
 
 type FormValues = {
   firstName: string;
@@ -29,15 +31,31 @@ type FormValues = {
 };
 
 const SignupForm = () => {
+  const [userRegistration] = useUserRegistrationMutation();
+  const router = useRouter();
+
   const onSubmit: SubmitHandler<FormValues> = async (data: any) => {
+    const fullName = [data?.firstName, data?.lastName]
+      .filter(Boolean)
+      .join("")
+      .trimEnd();
+
     const regData = {
-      name: [data?.firstName, data?.lastName].filter(Boolean).join(""),
+      name: fullName,
       email: data?.email,
       password: data?.password,
+      role: "customer",
       contactNo: "",
       address: "",
       profileImg: "",
     };
+    try {
+      const res = await userRegistration(regData);
+      // router.push("/");
+      console.log(res);
+    } catch (err: any) {
+      console.error(err.message);
+    }
 
     console.log(regData);
   };
