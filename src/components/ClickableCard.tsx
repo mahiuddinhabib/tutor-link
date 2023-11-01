@@ -11,7 +11,7 @@ import CommonImg from "@/assets/common-card-img.jpeg";
 export default function ClickableCard({ service }: { service: any }) {
   return (
     <Card>
-      <CardActionArea LinkComponent={Link} href="/signin">
+      <CardActionArea LinkComponent={Link} href={`/service/${service?.id}`}>
         <CardMedia>
           <Image
             src={CommonImg}
