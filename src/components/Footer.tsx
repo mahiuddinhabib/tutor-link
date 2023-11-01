@@ -53,7 +53,7 @@ export const Footer = () => {
               textDecoration: "none",
             }}
           >
-            LOGO
+            TUTOR LINK
           </Typography>
           <Stack direction="row" spacing={2} justifyContent="center" mt={2}>
             <Item href="/footer">Item 1</Item>

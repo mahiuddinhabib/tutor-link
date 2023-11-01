@@ -1,8 +1,13 @@
+"use client";
+
 import Footer from "@/components/Footer";
 import Navbar from "@/components/navbar/Navbar";
+import { useServicesQuery } from "@/redux/api/serviceApi";
 import { Container, CssBaseline } from "@mui/material";
 
 export default function Home() {
+  const { data, isLoading } = useServicesQuery({});
+  // console.log(data);
   return (
     <main>
       <Navbar />

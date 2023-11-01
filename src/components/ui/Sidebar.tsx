@@ -89,7 +89,7 @@ const Sidebar = () => {
             textDecoration: "none",
           }}
         >
-          LOGO
+          TUTOR LINK
         </Typography>
       </Toolbar>
       <Divider />
