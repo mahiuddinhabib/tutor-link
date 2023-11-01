@@ -25,6 +25,9 @@ import {
 import { Adb, Menu as MenuIcon } from "@mui/icons-material";
 import SearchBar from "./SearchBar";
 import Link from "next/link";
+import { isLoggedIn, removeUserInfo } from "@/services/auth.service";
+import { useRouter } from "next/navigation";
+import { authKey } from "@/constants/storageKey";
 
 const routeOptions: { label: string; href: string }[] = [
   { label: "Products", href: "/product" },
@@ -33,14 +36,18 @@ const routeOptions: { label: string; href: string }[] = [
 ];
 const userOptions: { label: string; href: string }[] = [
   { label: "Profile", href: "/profile" },
-  { label: "Account", href: "/account" },
-  { label: "Dashboard", href: "/dashboard" },
 ];
 
 function Navbar() {
   const [mobileMenu, setMobileMenu] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const [loggedIn, setLoggedIn] = useState(false); //remove it when implementing authentication
+  const router = useRouter();
+  const isSignedIn = isLoggedIn();
+
+  const logOut = () => {
+    removeUserInfo(authKey);
+    router.push("/");
+  };
 
   const handleDrawerToggle = () => {
     setMobileMenu((prevState) => !prevState);
@@ -197,24 +204,32 @@ function Navbar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {[
-                userOptions.map(({ label, href }) => (
-                  <Link key={label} href={href}>
-                    <MenuItem onClick={handleCloseUserMenu}>
-                      <Typography textAlign="center">{label}</Typography>
-                    </MenuItem>
-                  </Link>
-                )),
-                <MenuItem
-                  key="logout"
-                  onClick={() => {
-                    setAnchorElUser(null);
-                    setLoggedIn(false);
-                  }}
-                >
-                  <Typography textAlign="center">Logout</Typography>
-                </MenuItem>,
-              ]}
+              {isSignedIn ? (
+                [
+                  userOptions.map(({ label, href }) => (
+                    <Link key={label} href={href}>
+                      <MenuItem onClick={handleCloseUserMenu}>
+                        <Typography textAlign="center">{label}</Typography>
+                      </MenuItem>
+                    </Link>
+                  )),
+                  <MenuItem
+                    key="logout"
+                    onClick={() => {
+                      setAnchorElUser(null);
+                      logOut();
+                    }}
+                  >
+                    <Typography textAlign="center">Logout</Typography>
+                  </MenuItem>,
+                ]
+              ) : (
+                <Link href="/signin">
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">Login</Typography>
+                  </MenuItem>
+                </Link>
+              )}
             </Menu>
           </Box>
         </Toolbar>
