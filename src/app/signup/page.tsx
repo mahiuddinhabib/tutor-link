@@ -1,15 +1,13 @@
-import Navbar from "@/components/navbar/Navbar";
 import SignupForm from "@/components/signupForm/SignupForm";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Starter | Signup",
+  title: "Tutor Link | Signup",
 };
 
 const SignUpPage = () => {
   return (
     <>
-      {/* <Navbar /> */}
       <SignupForm />
     </>
   );

@@ -4,7 +4,6 @@ import {
   Avatar,
   Box,
   Button,
-  Container,
   CssBaseline,
   Grid,
   Paper,
@@ -15,10 +14,32 @@ import React from "react";
 import Link from "next/link";
 import Form from "../forms/Form";
 import { FormInputText } from "../forms/FormInputText";
+import { SubmitHandler } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { registrationSchema } from "@/schemas/registration";
+
+type FormValues = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  contactNo: string | undefined;
+  address: string | undefined;
+  profileImg: string | undefined;
+};
 
 const SignupForm = () => {
-  const onSubmit = async (data: any) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<FormValues> = async (data: any) => {
+    const regData = {
+      name: [data?.firstName, data?.lastName].filter(Boolean).join(""),
+      email: data?.email,
+      password: data?.password,
+      contactNo: "",
+      address: "",
+      profileImg: "",
+    };
+
+    console.log(regData);
   };
 
   return (
@@ -27,7 +48,7 @@ const SignupForm = () => {
       justifyContent="center"
       alignItems="center"
       minHeight="100vh"
-      width={{xs:"100vw", sm:"90vw", lg:"50vw"}}
+      width={{ xs: "100vw", sm: "90vw", lg: "50vw" }}
       mx="auto"
     >
       <Grid container>
@@ -71,9 +92,8 @@ const SignupForm = () => {
               sx={{ mt: 3 }}
             >
               <Form
-                submitHandler={
-                  onSubmit
-                } /* resolver={yupResolver(loginSchema)} */
+                submitHandler={onSubmit}
+                resolver={yupResolver(registrationSchema)}
               >
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
@@ -91,8 +111,9 @@ const SignupForm = () => {
                     <FormInputText
                       // fullWidth
                       // id="lastName"
-                      label="Last Name"
                       name="lastName"
+                      label="Last Name"
+                      placeholder="Your Last Name"
                       // autoComplete="family-name"
                     />
                   </Grid>
@@ -103,6 +124,8 @@ const SignupForm = () => {
                       // id="email"
                       label="Email Address"
                       name="email"
+                      type="email"
+                      placeholder="Your Email"
                       // autoComplete="email"
                     />
                   </Grid>
@@ -112,19 +135,12 @@ const SignupForm = () => {
                       // fullWidth
                       name="password"
                       label="Password"
-                      // type="password"
+                      type="password"
+                      placeholder="Password"
                       // id="password"
                       // autoComplete="new-password"
                     />
                   </Grid>
-                  {/* <Grid item xs={12}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox value="allowExtraEmails" color="primary" />
-                    }
-                    label="I want to receive inspiration, marketing promotions and updates via email."
-                  />
-                </Grid> */}
                 </Grid>
                 <Button
                   type="submit"

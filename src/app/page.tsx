@@ -6,7 +6,7 @@ import { useServicesQuery } from "@/redux/api/serviceApi";
 import { Container, CssBaseline } from "@mui/material";
 
 export default function Home() {
-  const { data, isLoading } = useServicesQuery({});
+  // const { data, isLoading } = useServicesQuery({});
   // console.log(data);
   return (
     <main>

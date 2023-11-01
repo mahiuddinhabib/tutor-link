@@ -10,6 +10,7 @@ interface FormInputProps {
   variant?: "filled" | "outlined" | "standard";
   value?: string | undefined;
   placeholder?: string;
+  type?: string;
   required?: boolean;
 }
 
@@ -20,6 +21,7 @@ export const FormInputText = ({
   variant = "outlined" /* control, */,
   value,
   placeholder,
+  type = "text",
   required = false,
 }: FormInputProps) => {
   const {
@@ -44,12 +46,13 @@ export const FormInputText = ({
           size={size}
           error={!!errorMessage}
           // onChange={onChange}
+          type={type}
           fullWidth
           label={label}
           variant={variant}
           placeholder={placeholder}
           {...field}
-          value={value ? value : field.value|| ""}
+          value={value ? value : field.value || ""}
           required={required}
         />
       )}
