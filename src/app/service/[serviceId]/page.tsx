@@ -23,6 +23,8 @@ import Navbar from "@/components/navbar/Navbar";
 import CommonImg from "@/assets/common-card-img.jpeg";
 import CommonProfileImg from "@/assets/profile.png";
 import CustomAccordions from "@/components/ui/CustomAccordions";
+import ReviewRating from "@/components/ui/ReviewRating";
+import ReviewForm from "@/components/ui/ReviewForm";
 
 const ServiceDetailPage = ({ params }: { params: { serviceId: string } }) => {
   const serviceId = params.serviceId;
@@ -216,6 +218,11 @@ const ServiceDetailPage = ({ params }: { params: { serviceId: string } }) => {
                 Frequently Ask Questions
               </Typography>
               <CustomAccordions />
+              <Typography variant="h6" sx={{ mt: 5 }}>
+                Review and Ratings
+              </Typography>
+              <ReviewRating />
+              <ReviewForm />
             </Box>
           </Grid>
         </Grid>
