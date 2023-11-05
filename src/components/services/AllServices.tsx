@@ -1,14 +1,14 @@
 import { useServicesQuery } from "@/redux/api/serviceApi";
 import React from "react";
 import ClickableCard from "../ClickableCard";
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 
 const AllServices = () => {
   const { data, isLoading } = useServicesQuery({});
   console.log(data);
   return (
     <Box>
-      <h1 style={{ textAlign: "center", marginBottom: "50px" }}>Services</h1>
+      <Typography variant="h4" sx={{ textAlign: "center", mb: "50px" }}>Our Services</Typography>
       <Grid container spacing={4}>
         {data?.services?.map((service:any) => (
           <Grid item xs={12} sm={6} md={4}
