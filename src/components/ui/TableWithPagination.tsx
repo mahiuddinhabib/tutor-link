@@ -15,31 +15,77 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
-
-function createData(id, name, email) {
-  return {
-    id,
-    name,
-    email,
-  };
-}
+import { getComparator, stableSort } from "@/helpers/table";
 
 const rows = [
-  createData(1,"Cupcake", "amail@example.com"),
-  createData(2,"Donut", "dmail@example.com"),
-  createData(3,"Eclair", "qmail@example.com"),
-  createData(4,"Frozen yoghurt", "whymail@example.com"),
-  createData(5,"Gingerbread", "nomail@example.com"),
-  createData(6,"Honeycomb", "mail@example.com"),
-  createData(7,"Ice cream sandwich", "xmail@example.com"),
-  createData(8,"Jelly Bean", "mail@example.com"),
-  createData(9,"KitKat", "ymail@example.com"),
-  createData(10,"Lollipop", "mail@example.com"),
-  createData(11,"Marshmallow", "mail@example.com"),
-  createData(12,"Nougat", "email@example.com"),
-  createData(13,"Oreo", "mail@example.com"),
+  {
+    id: 1,
+    name: "Cupcake",
+    email: "amail@example.com",
+  },
+  {
+    id: 2,
+    name: "Donut",
+    email: "dmail@example.com",
+  },
+  {
+    id: 3,
+    name: "Eclair",
+    email: "qmail@example.com",
+  },
+  {
+    id: 4,
+    name: "Frozen yoghurt",
+    email: "whymail@example.com",
+  },
+  {
+    id: 5,
+    name: "Gingerbread",
+    email: "nomail@example.com",
+  },
+  {
+    id: 6,
+    name: "Honeycomb",
+    email: "mail@example.com",
+  },
+  {
+    id: 7,
+    name: "Ice cream sandwich",
+    email: "xmail@example.com",
+  },
+  {
+    id: 8,
+    name: "Jelly Bean",
+    email: "mail@example.com",
+  },
+  {
+    id: 9,
+    name: "KitKat",
+    email: "ymail@example.com",
+  },
+  {
+    id: 10,
+    name: "Lollipop",
+    email: "mail@example.com",
+  },
+  {
+    id: 11,
+    name: "Marshmallow",
+    email: "mail@example.com",
+  },
+  {
+    id: 12,
+    name: "Nougat",
+    email: "email@example.com",
+  },
+  {
+    id: 13,
+    name: "Oreo",
+    email: "mail@example.com",
+  },
 ];
 
+/* 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -49,13 +95,11 @@ function descendingComparator(a, b, orderBy) {
   }
   return 0;
 }
-
 function getComparator(order, orderBy) {
   return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
-
 function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -66,7 +110,7 @@ function stableSort(array, comparator) {
     return a[1] - b[1];
   });
   return stabilizedThis.map((el) => el[0]);
-}
+} */
 
 const headCells = [
   {
@@ -76,6 +120,10 @@ const headCells = [
   {
     id: "email",
     label: "Email",
+  },
+  {
+    id: "action",
+    label: "Action",
   },
 ];
 
@@ -177,7 +225,7 @@ export default function PaginatedTable() {
             />
             <TableBody>
               {visibleRows.map((row, index) => {
-                const labelId = `enhanced-table-checkbox-${index}`;
+                // const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
                   <TableRow
@@ -186,8 +234,8 @@ export default function PaginatedTable() {
                     key={row.id}
                   >
                     <TableCell
-                      component="th"
-                      id={labelId}
+                      // component="th"
+                      // id={labelId}
                       scope="row"
                     >
                       {row.name}

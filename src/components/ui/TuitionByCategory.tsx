@@ -3,8 +3,6 @@ import {
   Card,
   CardActionArea,
   CardContent,
-  CardMedia,
-  Grid,
   Typography,
 } from "@mui/material";
 import React from "react";
