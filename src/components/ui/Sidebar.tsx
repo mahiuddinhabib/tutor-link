@@ -1,9 +1,8 @@
 import React from "react";
 import Box from "@mui/material/Box";
-import CssBaseline from "@mui/material/CssBaseline";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
-import { styled, useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
@@ -18,7 +17,8 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { Adb } from "@mui/icons-material";
+import { Adb, AccountCircle } from "@mui/icons-material";
+import SidebarList from "./SidebarList";
 
 const drawerWidth = 240;
 const openedMixin = (theme: any) => ({
@@ -51,9 +51,6 @@ const Sidebar = () => {
     setOpen(!open);
   };
   return (
-    // <Box sx={{ display: "flex" }}>
-    //   <CssBaseline />
-
     <Drawer
       variant="permanent"
       open={open}
@@ -93,61 +90,13 @@ const Sidebar = () => {
         </Typography>
       </Toolbar>
       <Divider />
-      <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding sx={{ display: "block" }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
       <Divider />
-      <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding sx={{ display: "block" }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
+      <SidebarList open={open} />
       <Box
         sx={{
           display: "flex",
-          position: "absolute",
-          bottom: "0px",
+          position: "fixed",
+          bottom: 0,
           width: "inherit",
           backgroundColor: "inherit",
           alignItems: "center",
@@ -155,12 +104,14 @@ const Sidebar = () => {
           padding: theme.spacing(0, 1),
         }}
       >
-        <IconButton onClick={handleDrawerToggle}>
+        <IconButton
+          onClick={handleDrawerToggle}
+          sx={{ backgroundColor: "gray" }}
+        >
           {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
         </IconButton>
       </Box>
     </Drawer>
-    // </Box>
   );
 };
 
