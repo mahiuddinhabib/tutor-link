@@ -1,8 +1,13 @@
 "use client";
 
+import { useState } from "react";
+import RConfirmation from "@/components/ui/ConfirmationDiaglog";
 import PaginatedTable from "@/components/ui/TableWithPagination";
 import { selectKeys } from "@/helpers/table";
-import { Button } from "@mui/material";
+import Button from "@mui/material/Button";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import IconButton from "@mui/material/IconButton";
 
 const headCells = [
   {
@@ -114,12 +119,42 @@ const items = [
 ];
 
 const Table = () => {
+  const [open, setOpen] = useState(false);
+  const [sId, setSId] = useState("");
   const selectedItems = selectKeys(items, ["id", "name", "address"]);
+
+  const handleOk = () => {
+    console.log(`id: ${sId}`);
+    setOpen(false);
+  };
+
   return (
     <div>
       <PaginatedTable headCells={headCells} items={selectedItems}>
-        {(item) => <Button onClick={() => console.log(item)}>btn2</Button>}
+        {(item) => (
+          <>
+            <IconButton
+              aria-label="delete"
+              color="error"
+              onClick={() => {
+                setOpen(true);
+                setSId(item?.id);
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+            <IconButton aria-label="delete" color="secondary">
+              <EditIcon />
+            </IconButton>
+          </>
+        )}
       </PaginatedTable>
+      <RConfirmation
+        open={open}
+        handleOk={handleOk}
+        handleClose={() => setOpen(false)}
+        DialogText="Are you sure to delete this user?"
+      />
     </div>
   );
 };

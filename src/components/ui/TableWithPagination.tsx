@@ -1,7 +1,6 @@
-// @ts-nocheck
 "use client";
 
-import * as React from "react";
+import { useMemo, useState } from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -11,60 +10,39 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
-import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
 import { dynamicRenderer, getComparator, stableSort } from "@/helpers/table";
-import { ITablePropTypes } from "@/types";
+import { IHeadCell, ITablePropTypes } from "@/types";
 
-/* 
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
+interface IEnhancedTableHeadProps {
+  headCells: IHeadCell[];
+  order: "asc" | "desc";
+  orderBy: string;
+  onRequestSort: any;
 }
-function getComparator(order, orderBy) {
-  return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-} */
 
-function EnhancedTableHead(props) {
-  const { headCells,order, orderBy, onRequestSort } = props;
-  const createSortHandler = (property) => (event) => {
+function EnhancedTableHead(props: IEnhancedTableHeadProps) {
+  const { headCells, order, orderBy, onRequestSort } = props;
+  const createSortHandler = (property: any) => (event: any) => {
     onRequestSort(event, property);
   };
 
   return (
     <TableHead>
       <TableRow>
-        {headCells.map((headCell) => (
+        {headCells?.map((headCell) => (
           <TableCell
-            key={headCell.value}
-            sortDirection={orderBy === headCell.value ? order : false}
+            key={headCell?.value}
+            sortDirection={orderBy === headCell?.value ? order : false}
           >
             <TableSortLabel
-              active={orderBy === headCell.value}
-              direction={orderBy === headCell.value ? order : "asc"}
-              onClick={createSortHandler(headCell.value)}
+              active={orderBy === headCell?.value}
+              direction={orderBy === headCell?.value ? order : "asc"}
+              onClick={createSortHandler(headCell?.value)}
             >
-              {headCell.label}
-              {orderBy === headCell.value ? (
+              {headCell?.label}
+              {orderBy === headCell?.value ? (
                 <Box component="span" sx={visuallyHidden}>
                   {order === "desc" ? "sorted descending" : "sorted ascending"}
                 </Box>
@@ -76,13 +54,6 @@ function EnhancedTableHead(props) {
     </TableHead>
   );
 }
-/* 
-EnhancedTableHead.propTypes = {
-  onRequestSort: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
-}; */
 
 export default function PaginatedTable({
   headCells,
@@ -90,35 +61,36 @@ export default function PaginatedTable({
   children,
   ...otherProps
 }: ITablePropTypes) {
-  const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("name");
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const handleRequestSort = (event, property) => {
+  const { order, setOrder, orderBy, setOrderBy, page, setPage } = otherProps;
+
+  const handleRequestSort = (event: any, property: any) => {
     const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(property);
+    if (setOrder) setOrder(isAsc ? "desc" : "asc");
+    if (setOrderBy) setOrderBy(property);
   };
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+  const handleChangePage = (event: any, newPage: number) => {
+    if (setPage) setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = (event: any) => {
     setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    if (setPage) setPage(0);
   };
 
   // Avoid a layout jump when reaching the last page with empty items.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - items.length) : 0;
+    (page as number) > 0
+      ? Math.max(0, (1 + (page as number)) * rowsPerPage - items?.length)
+      : 0;
 
-  const visibleRows = React.useMemo(
+  const visibleRows: Record<string, any>[] = useMemo(
     () =>
-      stableSort(items, getComparator(order, orderBy)).slice(
-        page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage
+      stableSort(items, getComparator(order, orderBy))?.slice(
+        (page as number) * rowsPerPage,
+        (page as number) * rowsPerPage + rowsPerPage
       ),
     [items, order, orderBy, page, rowsPerPage]
   );
@@ -126,31 +98,24 @@ export default function PaginatedTable({
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", my: 2 }}>
-        <Typography
-          variant="h6"
-          id="tableTitle"
-          sx={{ p: 3, textAlign: "center" }}
-        >
-          Nutrition
-        </Typography>
         <TableContainer>
           <Table
-            sx={{ minWidth: 750 }}
+            // sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
             size="medium"
           >
             <EnhancedTableHead
               headCells={headCells}
-              order={order}
-              orderBy={orderBy}
+              order={order as "asc" | "desc"}
+              orderBy={orderBy as string}
               onRequestSort={handleRequestSort}
-              rowCount={items.length}
+              // rowCount={items?.length || 0}
             />
             <TableBody>
-              {visibleRows.map((item, index) => {
+              {visibleRows?.map((item, index) => {
                 return (
-                  <TableRow hover tabIndex={-1} key={item.id}>
-                    {headCells.map(({ value }) => (
+                  <TableRow hover tabIndex={-1} key={item?.id}>
+                    {headCells?.map(({ value }) => (
                       <TableCell
                         key={value}
                         // component="th"
@@ -178,9 +143,9 @@ export default function PaginatedTable({
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={items.length}
+          count={items?.length || 0}
           rowsPerPage={rowsPerPage}
-          page={page}
+          page={page as number}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />

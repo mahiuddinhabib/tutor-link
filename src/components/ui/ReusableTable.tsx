@@ -1,43 +1,21 @@
-// // @ts-nocheck
 "use client";
 
-import React from "react";
-
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@mui/material";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 import { ITablePropTypes } from "@/types";
 import { dynamicRenderer } from "@/helpers/table";
 
-/* interface ITablePropTypes {
-  headCells: { value: string; label: string }[];
-  items: { [key: string]: any }[];
-  children: (item: { [key: string]: any }) => React.ReactNode;
-} */
 
 const RTable = ({
   headCells,
   items,
   children,
-  ...otherProps
 }: ITablePropTypes) => {
-  /*   const rowConfig = {
-    ...otherProps,
-  }; */
-
-  /*   const dynamicRenderer = (item: { [key: string]: any }, value: string) => {
-    if (value === "actions") {
-      return children(item);
-    } else {
-      return item[value];
-    }
-  }; */
 
   return (
     <>

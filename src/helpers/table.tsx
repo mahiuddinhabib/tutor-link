@@ -18,7 +18,7 @@ export function getComparator(order, orderBy) {
 
 export function stableSort(array, comparator) {
   const stabilizedThis = array?.map((el, index) => [el, index]);
-  console.log(stabilizedThis);
+  // console.log(stabilizedThis);
   stabilizedThis?.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) {
@@ -30,10 +30,11 @@ export function stableSort(array, comparator) {
 }
 
 export const dynamicRenderer = (
-  children?: (item: { [key: string]: any }) => React.ReactNode,
-  item: { [key: string]: any },
+  children?: (item: Record<string, any>) => React.ReactNode,
+  item: Record<string, any>,
   value: string
 ) => {
+  // console.log(item);
   if (value === "actions") {
     return children(item);
   } else {
@@ -45,7 +46,7 @@ export const selectKeys = <T extends Record<string, any>>(
   items: T[],
   selectedKeys: (keyof T)[]
 ): Partial<T>[] => {
-  return items.map(item => {
+  return items?.map(item => {
     return selectedKeys.reduce((filteredItem, key) => {
       if (item.hasOwnProperty(key)) {
         filteredItem[key] = item[key];
