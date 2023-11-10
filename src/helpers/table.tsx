@@ -28,3 +28,29 @@ export function stableSort(array, comparator) {
   });
   return stabilizedThis?.map((el) => el[0]);
 }
+
+export const dynamicRenderer = (
+  children?: (item: { [key: string]: any }) => React.ReactNode,
+  item: { [key: string]: any },
+  value: string
+) => {
+  if (value === "actions") {
+    return children(item);
+  } else {
+    return item[value];
+  }
+};
+
+export const selectKeys = <T extends Record<string, any>>(
+  items: T[],
+  selectedKeys: (keyof T)[]
+): Partial<T>[] => {
+  return items.map(item => {
+    return selectedKeys.reduce((filteredItem, key) => {
+      if (item.hasOwnProperty(key)) {
+        filteredItem[key] = item[key];
+      }
+      return filteredItem;
+    }, {} as Partial<T>);
+  });
+};

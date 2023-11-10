@@ -50,7 +50,11 @@ export interface IUser {
   profileImg: string,
 }
 
-
+export interface ITablePropTypes {
+  headCells: { value: string; label: string }[];
+  items: { [key: string]: any }[];
+  children?: (item: { [key: string]: any }) => React.ReactNode;
+}
 
 
 // -------------------------------------

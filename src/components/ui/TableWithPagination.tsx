@@ -2,7 +2,6 @@
 "use client";
 
 import * as React from "react";
-import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -15,75 +14,8 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
-import { getComparator, stableSort } from "@/helpers/table";
-
-const rows = [
-  {
-    id: 1,
-    name: "Cupcake",
-    email: "amail@example.com",
-  },
-  {
-    id: 2,
-    name: "Donut",
-    email: "dmail@example.com",
-  },
-  {
-    id: 3,
-    name: "Eclair",
-    email: "qmail@example.com",
-  },
-  {
-    id: 4,
-    name: "Frozen yoghurt",
-    email: "whymail@example.com",
-  },
-  {
-    id: 5,
-    name: "Gingerbread",
-    email: "nomail@example.com",
-  },
-  {
-    id: 6,
-    name: "Honeycomb",
-    email: "mail@example.com",
-  },
-  {
-    id: 7,
-    name: "Ice cream sandwich",
-    email: "xmail@example.com",
-  },
-  {
-    id: 8,
-    name: "Jelly Bean",
-    email: "mail@example.com",
-  },
-  {
-    id: 9,
-    name: "KitKat",
-    email: "ymail@example.com",
-  },
-  {
-    id: 10,
-    name: "Lollipop",
-    email: "mail@example.com",
-  },
-  {
-    id: 11,
-    name: "Marshmallow",
-    email: "mail@example.com",
-  },
-  {
-    id: 12,
-    name: "Nougat",
-    email: "email@example.com",
-  },
-  {
-    id: 13,
-    name: "Oreo",
-    email: "mail@example.com",
-  },
-];
+import { dynamicRenderer, getComparator, stableSort } from "@/helpers/table";
+import { ITablePropTypes } from "@/types";
 
 /* 
 function descendingComparator(a, b, orderBy) {
@@ -112,27 +44,8 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 } */
 
-const headCells = [
-  {
-    id: "name",
-    label: "Name",
-  },
-  {
-    id: "email",
-    label: "Email",
-  },
-  {
-    id: "action",
-    label: "Action",
-  },
-];
-
 function EnhancedTableHead(props) {
-  const {
-    order,
-    orderBy,
-    onRequestSort,
-  } = props;
+  const { headCells,order, orderBy, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -142,16 +55,16 @@ function EnhancedTableHead(props) {
       <TableRow>
         {headCells.map((headCell) => (
           <TableCell
-            key={headCell.id}
-            sortDirection={orderBy === headCell.id ? order : false}
+            key={headCell.value}
+            sortDirection={orderBy === headCell.value ? order : false}
           >
             <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
+              active={orderBy === headCell.value}
+              direction={orderBy === headCell.value ? order : "asc"}
+              onClick={createSortHandler(headCell.value)}
             >
               {headCell.label}
-              {orderBy === headCell.id ? (
+              {orderBy === headCell.value ? (
                 <Box component="span" sx={visuallyHidden}>
                   {order === "desc" ? "sorted descending" : "sorted ascending"}
                 </Box>
@@ -163,15 +76,20 @@ function EnhancedTableHead(props) {
     </TableHead>
   );
 }
-
+/* 
 EnhancedTableHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
   order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
-};
+}; */
 
-export default function PaginatedTable() {
+export default function PaginatedTable({
+  headCells,
+  items,
+  children,
+  ...otherProps
+}: ITablePropTypes) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("name");
   const [page, setPage] = React.useState(0);
@@ -192,23 +110,27 @@ export default function PaginatedTable() {
     setPage(0);
   };
 
-  // Avoid a layout jump when reaching the last page with empty rows.
+  // Avoid a layout jump when reaching the last page with empty items.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - items.length) : 0;
 
   const visibleRows = React.useMemo(
     () =>
-      stableSort(rows, getComparator(order, orderBy)).slice(
+      stableSort(items, getComparator(order, orderBy)).slice(
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage
       ),
-    [order, orderBy, page, rowsPerPage]
+    [items, order, orderBy, page, rowsPerPage]
   );
 
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", my: 2 }}>
-        <Typography variant="h6" id="tableTitle" sx={{p:3, textAlign:"center"}}>
+        <Typography
+          variant="h6"
+          id="tableTitle"
+          sx={{ p: 3, textAlign: "center" }}
+        >
           Nutrition
         </Typography>
         <TableContainer>
@@ -218,29 +140,26 @@ export default function PaginatedTable() {
             size="medium"
           >
             <EnhancedTableHead
+              headCells={headCells}
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={items.length}
             />
             <TableBody>
-              {visibleRows.map((row, index) => {
-                // const labelId = `enhanced-table-checkbox-${index}`;
-
+              {visibleRows.map((item, index) => {
                 return (
-                  <TableRow
-                    hover
-                    tabIndex={-1}
-                    key={row.id}
-                  >
-                    <TableCell
-                      // component="th"
-                      // id={labelId}
-                      scope="row"
-                    >
-                      {row.name}
-                    </TableCell>
-                    <TableCell>{row.email}</TableCell>
+                  <TableRow hover tabIndex={-1} key={item.id}>
+                    {headCells.map(({ value }) => (
+                      <TableCell
+                        key={value}
+                        // component="th"
+                        // id={labelId}
+                        scope="row"
+                      >
+                        {dynamicRenderer(children, item, value)}
+                      </TableCell>
+                    ))}
                   </TableRow>
                 );
               })}
@@ -259,7 +178,7 @@ export default function PaginatedTable() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={items.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
