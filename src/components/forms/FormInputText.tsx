@@ -46,6 +46,7 @@ export const FormInputText = ({
           size={size}
           error={!!errorMessage}
           // onChange={onChange}
+          id={name}
           type={type}
           fullWidth
           label={label}

@@ -8,6 +8,7 @@ import IconButton from "@mui/material/IconButton";
 import RConfirmation from "@/components/ui/ConfirmationDiaglog";
 import PaginatedTable from "@/components/ui/TableWithPagination";
 import { selectKeys } from "@/helpers/table";
+import Link from "next/link";
 
 const headCells = [
   {
@@ -67,9 +68,11 @@ export default function CustomerTable() {
             >
               <DeleteIcon />
             </IconButton>
-            <IconButton aria-label="delete" color="secondary">
-              <EditIcon />
-            </IconButton>
+            <Link href={`/admin/customer/${item?.id}`}>
+              <IconButton aria-label="delete" color="secondary">
+                <EditIcon />
+              </IconButton>
+            </Link>
           </>
         )}
       </PaginatedTable>
