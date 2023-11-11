@@ -61,9 +61,7 @@ export default function PaginatedTable({
   children,
   ...otherProps
 }: ITablePropTypes) {
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-
-  const { order, setOrder, orderBy, setOrderBy, page, setPage } = otherProps;
+  const { order, setOrder, orderBy, setOrderBy, page, setPage, rowsPerPage, setRowsPerPage } = otherProps;
 
   const handleRequestSort = (event: any, property: any) => {
     const isAsc = orderBy === property && order === "asc";
@@ -76,21 +74,22 @@ export default function PaginatedTable({
   };
 
   const handleChangeRowsPerPage = (event: any) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+    // console.log(rowsPerPage, parseInt(event.target.value, 10));
+    if (setRowsPerPage)setRowsPerPage(parseInt(event.target.value, 10));
     if (setPage) setPage(0);
   };
 
   // Avoid a layout jump when reaching the last page with empty items.
   const emptyRows =
     (page as number) > 0
-      ? Math.max(0, (1 + (page as number)) * rowsPerPage - items?.length)
+      ? Math.max(0, (1 + (page as number)) * (rowsPerPage as number) - items?.length)
       : 0;
 
   const visibleRows: Record<string, any>[] = useMemo(
     () =>
       stableSort(items, getComparator(order, orderBy))?.slice(
-        (page as number) * rowsPerPage,
-        (page as number) * rowsPerPage + rowsPerPage
+        (page as number) * (rowsPerPage as number),
+        (page as number) * (rowsPerPage as number) + (rowsPerPage as number)
       ),
     [items, order, orderBy, page, rowsPerPage]
   );
@@ -144,7 +143,7 @@ export default function PaginatedTable({
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
           count={items?.length || 0}
-          rowsPerPage={rowsPerPage}
+          rowsPerPage={rowsPerPage || 0}
           page={page as number}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}

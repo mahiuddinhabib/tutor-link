@@ -65,4 +65,6 @@ export interface ITablePropTypes {
   setOrderBy?: (value: string) => void;
   page?: number;
   setPage?: (value: number) => void;
+  rowsPerPage?: number;
+  setRowsPerPage?: (value: number) => void;
 }

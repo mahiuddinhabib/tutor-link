@@ -25,7 +25,7 @@ const headCells = [
   },
 ];
 
-export default function CustomerTable() {
+export default function TutorTable() {
   const [order, setOrder] = React.useState<"asc" | "desc">("asc");
   const [orderBy, setOrderBy] = React.useState("name");
   const [page, setPage] = React.useState(0);
@@ -37,8 +37,8 @@ export default function CustomerTable() {
   const { data: users, isLoading } = useGetUsersQuery(undefined);
   // console.log(isLoading, users);
 
-  const customers = users?.filter((b: any) => b.role === "customer");
-  const selectedItems = selectKeys(users, ["id", "name", "email"]);
+  const tutors = users?.filter((b: any) => b.role === "tutor");
+  const selectedItems = selectKeys(tutors, ["id", "name", "email"]);
 
   const handleOk = () => {
     console.log(`id: ${sId}`);
