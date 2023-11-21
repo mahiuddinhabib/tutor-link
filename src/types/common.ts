@@ -26,15 +26,24 @@ export interface IService {
   id: string;
   title: string;
   tutorId: string;
+  tutor?: IUser;
   price: string;
   subjectId: string;
+  subject?: ISubject;
+}
+
+export interface ISubject {
+  id: string;
+  title: string;
 }
 
 export interface IBooking {
   id: string;
   status: string;
   userId: string;
+  // user?:IUser;
   availableServiceId: string;
+  // availableService?: any;
   createdAt: string;
   updatedAt: string;
 }

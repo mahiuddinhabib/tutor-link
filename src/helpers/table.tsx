@@ -38,7 +38,12 @@ export const dynamicRenderer = (
   if (value === "actions") {
     return children(item);
   } else {
-    return item[value];
+    let res;
+    value?.split(".").map((val) => {
+      res = res ? res[val] : item[val];
+    });
+    return res;
+    // return item[value];
   }
 };
 
@@ -46,7 +51,7 @@ export const selectKeys = <T extends Record<string, any>>(
   items: T[],
   selectedKeys: (keyof T)[]
 ): Partial<T>[] => {
-  return items?.map(item => {
+  return items?.map((item) => {
     return selectedKeys.reduce((filteredItem, key) => {
       if (item.hasOwnProperty(key)) {
         filteredItem[key] = item[key];
